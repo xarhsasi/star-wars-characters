@@ -1,0 +1,66 @@
+volumes:
+  starwars_local_postgres_data: {}
+  starwars_local_postgres_data_backups: {}
+  starwars_localstack_data: {}
+
+x-fastapi-common: &fastapi-common
+  image: starwars
+  restart: unless-stopped
+  build:
+    context: .
+  depends_on:
+    - postgres
+    - redis
+  volumes:
+    - .:/app:z
+  env_file:
+    - ./.envs/.fastapi
+    - ./.envs/.postgres
+
+services:
+  fastapi:
+    <<: *fastapi-common
+    container_name: starwars_fastapi
+    command: /start
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8000:8000"
+
+  migrator:
+    <<: *fastapi-common
+    container_name: starwars_migrator
+    restart: on-failure
+    command: /migrate
+    depends_on:
+      - postgres
+
+  initializer:
+    <<: *fastapi-common
+    container_name: starwars_initializer
+    restart: on-failure
+    command: /initialize
+    depends_on:
+      - postgres
+      - migrator
+      - redis
+
+  postgres:
+    image: postgres:14.9
+    restart: unless-stopped
+    container_name: starwars_postgres
+    volumes:
+      - starwars_local_postgres_data:/var/lib/postgresql/data:Z
+      - starwars_local_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.postgres
+    ports:
+      - 5423:5432
+
+  redis:
+    image: redis:7.2.1
+    restart: unless-stopped
+    container_name: starwars_redis
+    ports:
+      - 6379:6379
