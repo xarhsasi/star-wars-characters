@@ -1,0 +1,23 @@
+name: cicd
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4 # fetch repo
+      - uses: actions/setup-python@v5 # install Python
+        with:
+          python-version: "3.10"
+
+      - name: Build package
+        run: |
+          make deps
+
+      # Pre commit execution
+      - name: pre-commit
+        uses: pre-commit/action@v3.0.1
