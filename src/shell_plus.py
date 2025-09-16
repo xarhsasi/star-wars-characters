@@ -9,18 +9,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from IPython.terminal.embed import InteractiveShellEmbed
 from traitlets.config import Config
 
-# from src.db import async_session
-# from src.users.service import UserService
+from src.utils.session import async_session
+from src.users.repository import UserRepository
 
 # Optionally add more imports or utilities
 
 # Set up an asynchronous session for async ORM use
-# session = async_session()
+session = async_session()
 
 # Load objects into interactive shell
 shell_vars = {
-    # "session": session,
-    # "user_service": UserService(session),
+    "session": session,
+    "user_repository": UserRepository(session),
     # Add any other objects you want to auto-load here
 }
 
