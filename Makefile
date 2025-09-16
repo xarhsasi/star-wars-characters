@@ -8,6 +8,11 @@ help:
 	@echo "make migrations message='message' - Create alembic migrations"
 	@echo "make shell-plus - Ipython shell with a lot of stuff loaded"
 	@echo "make deps - Install dependencies from uv-requirements.txt and uv sync"
+	@echo "make test - Run tests"
+	@echo "make build - Build docker images"
+	@echo "make up - Run docker compose"
+	@echo "======================================================================"
+
 
 uv-requirements:
 	uv export --format requirements-txt --no-emit-project -o requirements.txt
@@ -24,3 +29,9 @@ deps:
 
 test: # Run tests
 	docker compose run --rm fastapi pytest -vv
+
+build:
+	docker compose build
+
+up:
+	docker compose up
