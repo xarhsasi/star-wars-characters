@@ -22,5 +22,33 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ipython>=8.37.0",
+    "pre-commit>=4.3.0",
     "traitlets>=5.14.3",
 ]
+
+[tool.pytest.ini_options]
+python_files = ["tests.py", "test_*.py", "conftest.py"]
+testpaths = [
+    "tests",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+# Black-compatible line length; Ruff formatter honors this too.
+line-length = 88
+# Match your project’s runtime; adjust if you target another version.
+target-version = "py310"
+
+# Optional: ignore typical non-source dirs (tweak as needed)
+exclude = [
+  ".git",
+  ".venv",
+  "__pycache__",
+  "alembic",
+]
+
+[tool.ruff.lint]
+extend-select = ["I"]

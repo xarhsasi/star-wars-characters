@@ -19,9 +19,7 @@ app.autodiscover_tasks(packages=[])
 
 
 @setup_logging.connect
-def config_loggers(
-    *args: Any, **kwags: Any
-) -> None:  # pylint: disable=unused-argument
+def config_loggers(*args: Any, **kwags: Any) -> None:
     """
     Configures the loggers for the application using the logging configuration
     specified in the settings.

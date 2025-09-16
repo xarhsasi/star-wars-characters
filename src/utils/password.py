@@ -31,9 +31,7 @@ class BCryptPasswordService(PasswordService):
 
     def verify(self, plain_password: str, hashed_password: str) -> bool:
         """Verify a plain password against a hashed password using bcrypt."""
-        verified_password = self.pwd_context.verify(
-            plain_password, hashed_password
-        )
+        verified_password = self.pwd_context.verify(plain_password, hashed_password)
         # Mypy complains that the return type is Any.
         if not isinstance(hashed_password, str):
             raise ValueError("Hashed password is not a string.")

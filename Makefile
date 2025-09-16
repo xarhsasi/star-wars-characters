@@ -8,7 +8,7 @@ help:
 
 uv-requirements:
 	uv export -o requirements.txt
-	
+
 migrations: # Create alembic migrations
 	docker compose run fastapi alembic revision --autogenerate -m ${message}
 

@@ -12,6 +12,7 @@ from starlette.middleware.cors import CORSMiddleware
 from src.models import Base
 from src.routers import base_router
 from src.settings import settings
+
 # from src.users.router import user_router
 from src.version import __version__
 

@@ -9,8 +9,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from IPython.terminal.embed import InteractiveShellEmbed
 from traitlets.config import Config
 
-from src.utils.session import async_session
 from src.users.repository import UserRepository
+from src.utils.session import async_session
 
 # Optionally add more imports or utilities
 

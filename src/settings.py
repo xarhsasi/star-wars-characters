@@ -72,17 +72,13 @@ class CeleryConfig(BaseModel):
     task_time_limit: int = 5 * 60
     task_soft_time_limit: int = 60
     result_expires: int = 60 * 24 * 7
-    result_backend: str = (
-        f"db+{env.str('DATABASE_URL').replace('asyncpg', 'psycopg2')}"
-    )
+    result_backend: str = f"db+{env.str('DATABASE_URL').replace('asyncpg', 'psycopg2')}"
 
 
 class AuthenticationConfig(BaseModel):
     JWT_SECRET_KEY: str = env.str("JWT_SECRET")
     JWT_ALGORITHM: str = env.str("JWT_ALGORITHM")
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: str = env.int(
-        "JWT_ACCESS_TOKEN_EXPIRE_MINUTES"
-    )
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: str = env.int("JWT_ACCESS_TOKEN_EXPIRE_MINUTES")
     JWT_TOKEN_URL: str = env.str("JWT_TOKEN_URL", "/v1/user/token")
 
 
@@ -91,9 +87,7 @@ class Settings(BaseSettings):
 
     API_STR: str = "/v1"
     PROJECT_NAME: str = "Star Wars Characters"
-    DESCRIPTION: str = (
-        "The ultimate mail-agent project using the FastApi framework."
-    )
+    DESCRIPTION: str = "The ultimate mail-agent project using the FastApi framework."
     VERSION: str = env.str("VERSION", "0.1.0")
     ENABLE_SWAGGER: bool = env.bool("ENABLE_SWAGGER", False)
     CORS_ORIGINS: List = env.list("CORS_ORIGINS")

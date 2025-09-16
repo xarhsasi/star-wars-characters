@@ -5,17 +5,17 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.users.schemas import UserCreate, UserUpdate
-from src.utils.password import (
-    BCryptPasswordService,
-    PasswordService,
-)
 from src.users.exceptions import (
     UserAlreadyExistsError,
     UserBadCredentials,
     UserNotFoundError,
 )
 from src.users.models import User
+from src.users.schemas import UserCreate, UserUpdate
+from src.utils.password import (
+    BCryptPasswordService,
+    PasswordService,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -53,9 +53,7 @@ class UserRepository:
         """Create a new user in the database."""
         # Make sure user is not already in the database.
         stmt = select(self._instance).filter_by(email=user.email)
-        user_exists = (
-            await self.db.execute(statement=stmt)
-        ).scalar_one_or_none()
+        user_exists = (await self.db.execute(statement=stmt)).scalar_one_or_none()
         if user_exists is not None:
             raise UserAlreadyExistsError(email=user.email)
 
@@ -96,11 +94,7 @@ class UserRepository:
             await self.db.execute(
                 update(self._instance)
                 .where(self._instance.id == db_user.id)
-                .values(
-                    **user.model_dump(
-                        exclude_unset=True, exclude_defaults=True
-                    )
-                )
+                .values(**user.model_dump(exclude_unset=True, exclude_defaults=True))
             )
         except IntegrityError as e:
             # TODO: This should be UniqueValidationError not the generic IntegrityError.

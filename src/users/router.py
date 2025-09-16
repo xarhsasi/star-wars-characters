@@ -4,26 +4,16 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from src.utils.jwt import (
-    JwtAuthenticationService,
-    JwtHTTPBearer,
-)
-from src.utils.password import BCryptPasswordService
 from src.depends import get_db
 from src.users.constants import (
     LIST_USERS_API_DESCRIPTION,
     USERS_AUTHENTICATION_API_DESCRIPTION,
 )
-from src.users.exceptions import (
-    UserAlreadyExistsError,
-    UserNotFoundError,
-)
-from src.users.schemas import (
-    UserAuth,
-    UserResponse,
-    UserWithCredentials,
-)
+from src.users.exceptions import UserAlreadyExistsError, UserNotFoundError
 from src.users.repository import UserRepository
+from src.users.schemas import UserAuth, UserResponse, UserWithCredentials
+from src.utils.jwt import JwtAuthenticationService, JwtHTTPBearer
+from src.utils.password import BCryptPasswordService
 
 logger = logging.getLogger(__name__)
 
