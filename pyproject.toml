@@ -23,6 +23,8 @@ dependencies = [
 dev = [
     "ipython>=8.37.0",
     "pre-commit>=4.3.0",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
     "traitlets>=5.14.3",
 ]
 
@@ -37,12 +39,11 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [tool.ruff]
-# Black-compatible line length; Ruff formatter honors this too.
+# Black-compatible line length
 line-length = 88
-# Match your project’s runtime; adjust if you target another version.
+# Match your project’s runtime
 target-version = "py310"
 
-# Optional: ignore typical non-source dirs (tweak as needed)
 exclude = [
   ".git",
   ".venv",
