@@ -6,6 +6,11 @@ help:
 	@echo "=============================== Usage ==============================="
 	@echo "make build       - Build the project"
 
-build: echo clear
-	@echo "=============================== Building ==============================="
+uv-requirements:
+	uv export -o requirements.txt
 	
+migrations: # Create alembic migrations
+	docker compose run fastapi alembic revision --autogenerate -m ${message}
+
+shell-plus: # Ipython shell with a lot of stuff loaded
+	docker compose run ${exec_args} --rm fastapi python /app/src/shell_plus.py

@@ -1,13 +1,22 @@
 # Use a base Python image
 FROM python:3.10.13-slim
 
+RUN python -m venv /opt/venv
+
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
+ENV PATH="/opt/venv/bin:$PATH"
 
 WORKDIR /app
 
 # Copy requirements
 COPY requirements.txt .
+
+# Build prerequisites for psycopg2 from source
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    build-essential gcc python3-dev libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
