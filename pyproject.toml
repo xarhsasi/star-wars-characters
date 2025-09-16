@@ -32,6 +32,7 @@ dev = [
 python_files = ["tests.py", "test_*.py", "conftest.py"]
 testpaths = [
     "tests",
+    "src/*/tests",
 ]
 
 [build-system]
