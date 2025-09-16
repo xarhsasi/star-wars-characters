@@ -10,7 +10,7 @@ help:
 	@echo "make deps - Install dependencies from uv-requirements.txt and uv sync"
 
 uv-requirements:
-	uv export -o requirements.txt
+	uv export --format requirements-txt --no-emit-project -o requirements.txt
 
 migrations: # Create alembic migrations
 	docker compose run fastapi alembic revision --autogenerate -m ${message}
@@ -21,3 +21,6 @@ shell-plus: # Ipython shell with a lot of stuff loaded
 deps:
 	pip install -r uv-requirements.txt
 	uv sync
+
+test: # Run tests
+	docker compose run --rm fastapi pytest -vv

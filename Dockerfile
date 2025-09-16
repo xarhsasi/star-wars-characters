@@ -9,17 +9,17 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 WORKDIR /app
 
-# Copy requirements
-COPY requirements.txt .
-
 # Build prerequisites for psycopg2 from source
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     build-essential gcc python3-dev libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy requirements
+COPY requirements.txt .
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --upgrade pip \
+    && pip install --no-cache-dir --require-hashes -r requirements.txt
 
 # Copy app code
 COPY . /app/src

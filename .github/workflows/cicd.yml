@@ -1,4 +1,4 @@
-name: cicd
+name: ci
 
 on:
   push:
@@ -21,3 +21,7 @@ jobs:
       # Pre commit execution
       - name: pre-commit
         uses: pre-commit/action@v3.0.1
+
+      - name: Test with pytest
+        run: |
+          make test
