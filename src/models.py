@@ -22,11 +22,9 @@ class Base(DeclarativeBase):
     id: Any
     __name__: ClassVar[str]
 
-    # Generate __tablename__ automatically
-    @declared_attr  # type: ignore[arg-type]
-    def __tablename__(cls) -> str:  # pylint: disable=no-self-argument
+    @declared_attr
+    def __tablename__(cls) -> str:
         return cls.__name__.lower()
-
 
 class Timestamps:
     """Abstract base class for timestamp columns."""

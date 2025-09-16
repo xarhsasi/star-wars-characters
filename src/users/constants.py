@@ -1,0 +1,7 @@
+USERS_AUTHENTICATION_API_DESCRIPTION = "Authenticate a user."
+CREATE_USERS_API_DESCRIPTION = "Create a user."
+RETRIEVE_USERS_API_DESCRIPTION = "Retrieve a user by its ID."
+LIST_USERS_API_DESCRIPTION = "List all users."
+PARTIAL_UPDATE_USERS_API_DESCRIPTION = "Partially update a user by its ID."
+UPDATE_USERS_API_DESCRIPTION = "Update a user by its ID."
+DELETE_USERS_API_DESCRIPTION = "Delete a user by its ID."
