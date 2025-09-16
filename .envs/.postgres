@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
-POSTGRES_DB=mailgenie
+POSTGRES_DB=star_wars_characters
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
 DATABASE_URL=postgresql+asyncpg://admin:admin@postgres:5432/star_wars_characters

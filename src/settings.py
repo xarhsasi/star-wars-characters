@@ -97,8 +97,8 @@ class Settings(BaseSettings):
     VERSION: str = env.str("VERSION", "0.1.0")
     ENABLE_SWAGGER: bool = env.bool("ENABLE_SWAGGER", False)
     CORS_ORIGINS: List = env.list("CORS_ORIGINS")
-    DATABASE_URL: str = env.str("DATABASE_URL", "")
-    TEST_DATABASE_URL: str = DATABASE_URL.replace("mailgenie", "test")
+    DATABASE_URL: str = env.str("DATABASE_URL")
+    TEST_DATABASE_URL: str = DATABASE_URL.replace("star_wars_characters", "test")
     # Celery
     # ------------------------------------------------------------------------------
     CELERY_CONFIG: CeleryConfig = CeleryConfig()
