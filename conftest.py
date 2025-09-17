@@ -1,11 +1,13 @@
 from typing import AsyncGenerator
 
+import factory
 import pytest
+from async_factory_boy.factory.sqlalchemy import AsyncSQLAlchemyFactory
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
-from src.characters.models import Base
+from src.characters.models import Base, Character
 from src.main import app
 from src.utils.session import get_session
 
@@ -18,17 +20,17 @@ TEST_DB_URL = "sqlite+aiosqlite:///:memory:"
 # ---------------------------------------------------------------------------- #
 @pytest.fixture(scope="session")
 async def engine():
-    engine = create_async_engine(
+    async_engine = create_async_engine(
         TEST_DB_URL,
-        poolclass=StaticPool,  # keep one connection for :memory:
+        poolclass=StaticPool,  # keep one connection for memory
         future=True,
     )
-    async with engine.begin() as conn:
+    async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     try:
-        yield engine
+        yield async_engine
     finally:
-        await engine.dispose()
+        await async_engine.dispose()
 
 
 @pytest.fixture
@@ -65,3 +67,26 @@ def anyio_backend() -> str:
         str: The backend name for AnyIO, which is 'asyncio'.
     """
     return "asyncio"
+
+
+# ---------------------------------------------------------------------------- #
+#                                 Factories                                    #
+# ---------------------------------------------------------------------------- #
+class CharacterFactory(AsyncSQLAlchemyFactory):
+    class Meta:
+        model = Character
+
+    name = factory.Faker("name")
+    height = factory.Faker("random_int", min=100, max=220)
+    hair_color = factory.Faker("color_name")
+    skin_color = factory.Faker("color_name")
+    eye_color = factory.Faker("color_name")
+    birth_year = "19BBY"
+    gender = "male"
+
+
+@pytest.fixture(autouse=True)
+async def _wire_factories(session: AsyncSession):
+    # point async-factory-boy at THIS test’s AsyncSession
+    CharacterFactory._meta.sqlalchemy_session = session
+    yield

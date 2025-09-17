@@ -79,6 +79,18 @@ wheels = [
 ]
 
 [[package]]
+name = "async-factory-boy"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "factory-boy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0e/e5/a1eb125af7020d94e75caf4a994bf8d8c8c54924fd6b90b4a2a157583ced/async_factory_boy-1.0.1.tar.gz", hash = "sha256:af3a42d9c26b86cc427faf5159ac2e8541b5564bf30424282eb866620af4e143", size = 8667, upload-time = "2023-08-12T13:44:44.458Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/79/aa/244bc0c1a1076217648d8268503656d5f08f9d7c319d4115fd13118dae1a/async_factory_boy-1.0.1-py2.py3-none-any.whl", hash = "sha256:a0a652776ee164b60a45be06aca44a18781710447de1c534dda82d6cfe23f026", size = 5688, upload-time = "2023-08-12T13:44:43.146Z" },
+]
+
+[[package]]
 name = "async-timeout"
 version = "5.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -479,6 +491,30 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/cc/28/c14e053b6762b1044f34a13aab6859bbf40456d37d23aa286ac24cfd9a5d/executing-2.2.1.tar.gz", hash = "sha256:3632cc370565f6648cc328b32435bd120a1e4ebb20c77e3fdde9a13cd1e533c4", size = 1129488, upload-time = "2025-09-01T09:48:10.866Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c1/ea/53f2148663b321f21b5a606bd5f191517cf40b7072c0497d3c92c4a13b1e/executing-2.2.1-py2.py3-none-any.whl", hash = "sha256:760643d3452b4d777d295bb167ccc74c64a81df23fb5e08eff250c425a4b2017", size = 28317, upload-time = "2025-09-01T09:48:08.5Z" },
+]
+
+[[package]]
+name = "factory-boy"
+version = "3.3.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "faker" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ba/98/75cacae9945f67cfe323829fc2ac451f64517a8a330b572a06a323997065/factory_boy-3.3.3.tar.gz", hash = "sha256:866862d226128dfac7f2b4160287e899daf54f2612778327dd03d0e2cb1e3d03", size = 164146, upload-time = "2025-02-03T09:49:04.433Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/27/8d/2bc5f5546ff2ccb3f7de06742853483ab75bf74f36a92254702f8baecc79/factory_boy-3.3.3-py2.py3-none-any.whl", hash = "sha256:1c39e3289f7e667c4285433f305f8d506efc2fe9c73aaea4151ebd5cdea394fc", size = 37036, upload-time = "2025-02-03T09:49:01.659Z" },
+]
+
+[[package]]
+name = "faker"
+version = "37.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tzdata" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3a/da/1336008d39e5d4076dddb4e0f3a52ada41429274bf558a3cc28030d324a3/faker-37.8.0.tar.gz", hash = "sha256:090bb5abbec2b30949a95ce1ba6b20d1d0ed222883d63483a0d4be4a970d6fb8", size = 1912113, upload-time = "2025-09-15T20:24:13.592Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f5/11/02ebebb09ff2104b690457cb7bc6ed700c9e0ce88cf581486bb0a5d3c88b/faker-37.8.0-py3-none-any.whl", hash = "sha256:b08233118824423b5fc239f7dd51f145e7018082b4164f8da6a9994e1f1ae793", size = 1953940, upload-time = "2025-09-15T20:24:11.482Z" },
 ]
 
 [[package]]
@@ -1563,6 +1599,9 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "aiosqlite" },
+    { name = "async-factory-boy" },
+    { name = "factory-boy" },
+    { name = "faker" },
     { name = "httpx" },
     { name = "ipython", version = "8.37.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "ipython", version = "9.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -1591,6 +1630,9 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "aiosqlite", specifier = ">=0.21.0" },
+    { name = "async-factory-boy", specifier = ">=1.0.1" },
+    { name = "factory-boy", specifier = ">=3.3.3" },
+    { name = "faker", specifier = ">=37.8.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "ipython", specifier = ">=8.37.0" },
     { name = "pre-commit", specifier = ">=4.3.0" },

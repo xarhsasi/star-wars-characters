@@ -18,6 +18,18 @@ characters_router = APIRouter(
 
 
 @characters_router.get(
+    "/search/", description="Search characters", response_model=list[CharacterOut]
+)
+async def search_characters(
+    CharacterServiceDI: CharacterServiceDI,
+    query: str = Query(min_length=1),
+) -> list[CharacterOut]:
+    """Search characters by name."""
+    characters = await CharacterServiceDI.search(query=query)
+    return characters
+
+
+@characters_router.get(
     "/", description="GET characters", response_model=Page[CharacterOut]
 )
 async def list_characters(
@@ -31,7 +43,7 @@ async def list_characters(
 
 
 @characters_router.get(
-    "/{id}", description="GET characters", response_model=CharacterOut
+    "/{id}/", description="GET characters", response_model=CharacterOut
 )
 async def retrieve_character(
     CharacterServiceDI: CharacterServiceDI, id: int = Path(..., ge=1)
@@ -42,15 +54,3 @@ async def retrieve_character(
     except CharacterNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail) from e
     return CharacterOut.model_validate(character)
-
-
-@characters_router.get(
-    "/search/", description="Search characters", response_model=list[CharacterOut]
-)
-async def search_characters(
-    CharacterServiceDI: CharacterServiceDI,
-    query: str = Query(..., min_length=1),
-) -> list[CharacterOut]:
-    """Search characters by name."""
-    characters = await CharacterServiceDI.search(query=query)
-    return characters
