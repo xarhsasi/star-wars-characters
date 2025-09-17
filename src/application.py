@@ -6,7 +6,6 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from src.characters.router import characters_router
-from src.models import Base
 from src.routers import base_router
 from src.settings import settings
 
@@ -59,8 +58,5 @@ def create_application() -> FastAPI:
     # event handler
     application.add_event_handler("startup", startup_handler)
     application.add_event_handler("shutdown", shutdown_handler)
-
-    # load logging config
-    logging.config.dictConfig(settings.LOGGING_CONFIG)
 
     return application
