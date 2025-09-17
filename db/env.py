@@ -6,6 +6,7 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from src.characters.models import Character  # noqa: F401
 from src.models import Base
 from src.settings import settings
 from src.users.models import User  # noqa: F401
