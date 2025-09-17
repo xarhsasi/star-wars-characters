@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Generic, Sequence, Type, TypeVar
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 _T = TypeVar("_T")  # ORM model type
@@ -48,7 +48,13 @@ class Repository(Generic[_T]):
         await self.session.delete(obj)
         await self.session.flush()
 
-    async def list(self) -> Sequence[_T]:
+    async def list(self, *, limit: int, offset: int) -> Sequence[_T]:
         """Return all rows of the model."""
-        result = await self.session.execute(select(self._model))
+        result = await self.session.execute(
+            select(self._model).order_by(self._model.id).limit(limit).offset(offset)
+        )
         return result.scalars().all()
+
+    async def count(self) -> int:
+        stmt = select(func.count()).select_from(self._model)
+        return await self.session.scalar(stmt)

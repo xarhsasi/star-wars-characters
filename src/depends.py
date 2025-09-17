@@ -1,9 +1,17 @@
-from star_wars_characters.db import async_session
+from typing import Annotated
+
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.characters.service import CharacterService
+from src.utils.session import get_session
 
 
-async def get_db() -> async_session:
-    db = async_session()
-    try:
-        yield db
-    finally:
-        await db.close()
+# --- DI helpers ---
+def get_character_service(
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> CharacterService:
+    return CharacterService(session)
+
+
+CharacterServiceDI = Annotated[CharacterService, Depends(get_character_service)]
