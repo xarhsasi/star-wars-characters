@@ -30,6 +30,7 @@ dev = [
     "pre-commit>=4.3.0",
     "pytest>=8.4.2",
     "pytest-asyncio>=1.2.0",
+    "pytest-cov>=7.0.0",
     "traitlets>=5.14.3",
 ]
 
@@ -59,3 +60,11 @@ exclude = [
 
 [tool.ruff.lint]
 extend-select = ["I"]
+
+[tool.coverage.run]
+omit = ["*tests*", "*developer_tools*"]
+concurrency = ["greenlet", "thread"]
+include = ["/app/src/*", ]
+
+[tool.coverage.report]
+precision = 2
