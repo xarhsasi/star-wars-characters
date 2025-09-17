@@ -7,8 +7,10 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from src.characters.models import Character  # noqa: F401
+from src.films.models import Film  # noqa: F401
 from src.models import Base
 from src.settings import settings
+from src.starships.models import Starship  # noqa: F401
 from src.users.models import User  # noqa: F401
 
 logger = logging.getLogger(__name__)
