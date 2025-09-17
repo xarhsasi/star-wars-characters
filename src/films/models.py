@@ -19,11 +19,11 @@ class Film(Base, Timestamps):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String, index=True)
-    opening_crawl: Mapped[str] = mapped_column(String)
-    director: Mapped[str] = mapped_column(String)
-    producer: Mapped[str] = mapped_column(String)
-    release_date: Mapped[DateTime] = mapped_column(DateTime)
-    url: Mapped[str] = mapped_column(String, unique=True)
+    opening_crawl: Mapped[str] = mapped_column(String, nullable=True)
+    director: Mapped[str] = mapped_column(String, nullable=True)
+    producer: Mapped[str] = mapped_column(String, nullable=True)
+    release_date: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
+    url: Mapped[str] = mapped_column(String, unique=True, nullable=True)
     characters: Mapped[list["Character"]] = relationship(
         "Character", secondary=film_characters, back_populates="films"
     )

@@ -10,3 +10,4 @@ from src.characters.models import Character
 from src.films.models import Film
 from src.models import film_characters, starship_films
 from src.starships.models import Starship
+from src.users.models import User
