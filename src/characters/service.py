@@ -12,11 +12,11 @@ from src.utils.schemas import Page
 class CharacterService:
     def __init__(self, session: AsyncSession):
         self.session = session
-        self.repository = CharacterRepository(session)
+        self._repository = CharacterRepository(session)
 
     async def get(self, id: int) -> Character:
         """Retrieve a character by ID."""
-        obj = await self.repository.get(id=id)
+        obj = await self._repository.get(id=id)
         if not obj:
             raise CharacterNotFoundException(id=id)
         return obj
@@ -26,8 +26,8 @@ class CharacterService:
         page = max(1, page)
         page_size = max(1, min(page_size, 1000))
         offset = (page - 1) * page_size
-        items = await self.repository.list(limit=page_size, offset=offset)
-        total = await self.repository.count()
+        items = await self._repository.list(limit=page_size, offset=offset)
+        total = await self._repository.count()
 
         return Page(
             items=items,
@@ -39,5 +39,5 @@ class CharacterService:
 
     async def search(self, query: str) -> Sequence[Character]:
         """Search characters by name."""
-        items = await self.repository.search(query=query)
+        items = await self._repository.search(query=query)
         return items

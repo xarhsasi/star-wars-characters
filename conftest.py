@@ -81,8 +81,6 @@ class CharacterFactory(AsyncSQLAlchemyFactory):
     hair_color = factory.Faker("color_name")
     skin_color = factory.Faker("color_name")
     eye_color = factory.Faker("color_name")
-    birth_year = "19BBY"
-    gender = "male"
 
 
 @pytest.fixture(autouse=True)

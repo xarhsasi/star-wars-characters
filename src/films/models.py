@@ -1,7 +1,7 @@
 from sqlalchemy import DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.models import Base, Timestamps
+from src.models import Base, Timestamps, film_characters, starship_films
 
 
 class Film(Base, Timestamps):
@@ -17,5 +17,8 @@ class Film(Base, Timestamps):
     release_date: Mapped[DateTime] = mapped_column(DateTime)
     url: Mapped[str] = mapped_column(String, unique=True)
     characters: Mapped[list["Character"]] = relationship(
-        "Character", secondary="film_characters", back_populates="films"
+        "Character", secondary=film_characters, back_populates="films"
+    )
+    starships: Mapped[list["Starship"]] = relationship(
+        "Starship", secondary=starship_films, back_populates="films"
     )

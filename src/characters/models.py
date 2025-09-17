@@ -1,8 +1,7 @@
-from sqlalchemy import DateTime, Integer, String
+from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
 
-from src.models import Base, Timestamps
+from src.models import Base, Timestamps, film_characters
 
 
 class Character(Base, Timestamps):
@@ -18,3 +17,7 @@ class Character(Base, Timestamps):
     eye_color: Mapped[str] = mapped_column(String, nullable=True)
     birth_year: Mapped[str] = mapped_column(String, nullable=True)
     gender: Mapped[str] = mapped_column(String, nullable=True)
+
+    films: Mapped[list["Film"]] = relationship(
+        "Film", secondary=film_characters, back_populates="characters"
+    )

@@ -9,6 +9,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from IPython.terminal.embed import InteractiveShellEmbed
 from traitlets.config import Config
 
+from src.characters.models import Character
+from src.characters.service import CharacterService
+from src.films.models import Film
+from src.starships.models import Starship
 from src.users.repository import UserRepository
 from src.utils.session import async_session
 
@@ -20,7 +24,10 @@ session = async_session()
 # Load objects into interactive shell
 shell_vars = {
     "session": session,
-    "user_repository": UserRepository(session),
+    "Starship": Starship,
+    "Film": Film,
+    "Character": Character,
+    "character_service": CharacterService(session=session),
     # Add any other objects you want to auto-load here
 }
 

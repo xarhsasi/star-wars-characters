@@ -1,9 +1,9 @@
 """The base classes for all models."""
 
 from datetime import datetime
-from typing import Any, Callable, ClassVar
+from typing import Any, ClassVar
 
-from sqlalchemy import DateTime
+from sqlalchemy import Column, DateTime, ForeignKey, Table
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -11,9 +11,6 @@ from sqlalchemy.orm import (
     mapped_column,
 )
 from sqlalchemy.sql import func
-
-# Guide mypy to know that func is indeed a callable method
-func: Callable  # type:ignore[no-redef]
 
 
 class Base(DeclarativeBase):
@@ -36,3 +33,27 @@ class Timestamps:
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), onupdate=func.now()
     )
+
+
+# Association Tables
+
+film_characters = Table(
+    "film_characters",
+    Base.metadata,
+    Column("film_id", ForeignKey("films.id", ondelete="CASCADE"), primary_key=True),
+    Column(
+        "character_id",
+        ForeignKey("characters.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+)
+
+
+starship_films = Table(
+    "starship_films",
+    Base.metadata,
+    Column("film_id", ForeignKey("films.id", ondelete="CASCADE"), primary_key=True),
+    Column(
+        "startship_id", ForeignKey("starships.id", ondelete="CASCADE"), primary_key=True
+    ),
+)
