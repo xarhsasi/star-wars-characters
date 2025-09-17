@@ -1,7 +1,15 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from sqlalchemy import DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models import Base, Timestamps, film_characters, starship_films
+
+if TYPE_CHECKING:
+    from src.characters.models import Character  # noqa: F401
+    from src.starships.models import Starship  # noqa: F401
 
 
 class Film(Base, Timestamps):
