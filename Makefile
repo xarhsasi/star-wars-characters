@@ -32,7 +32,7 @@ deps:
 	uv sync
 
 test: # Run tests
-	docker compose run --rm fastapi pytest -vv --cov
+	docker compose run --rm fastapi pytest -vv --cov --cov-report=xml
 
 build:
 	docker compose build
