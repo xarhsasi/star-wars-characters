@@ -4,9 +4,9 @@ import logging
 
 from fastapi import APIRouter, HTTPException, Path, Query
 
-from src.characters.exceptions import CharacterNotFoundException
 from src.characters.schemas import CharacterOut
 from src.depends import CharacterServiceDI
+from src.exceptions import ORMNotFoundException
 from src.utils.schemas import Page
 
 logger = logging.getLogger(__name__)
@@ -51,6 +51,6 @@ async def retrieve_character(
     """Fetch and store all characters in DB."""
     try:
         character = await CharacterServiceDI.get(id=id)
-    except CharacterNotFoundException as e:
+    except ORMNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail) from e
     return CharacterOut.model_validate(character)

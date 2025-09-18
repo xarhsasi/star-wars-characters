@@ -4,9 +4,8 @@ import logging
 
 from fastapi import APIRouter, HTTPException, Path, Query
 
-from src.characters.exceptions import CharacterNotFoundException
-from src.depends import FilmServiceDI, StarshipServiceDI
-from src.films.schemas import FilmOut
+from src.depends import StarshipServiceDI
+from src.exceptions import ORMNotFoundException
 from src.starships.schemas import StarshipOut
 from src.utils.schemas import Page
 
@@ -50,6 +49,6 @@ async def retrieve_starship(
     """Fetch and store all starships in DB."""
     try:
         character = await StarshipServiceDI.get(id=id)
-    except CharacterNotFoundException as e:
+    except ORMNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail) from e
     return StarshipOut.model_validate(character)

@@ -51,7 +51,7 @@ class TestRouterIntegration:
         response = await client.get("v1/character/99999/")
         assert response.status_code == http.HTTPStatus.NOT_FOUND
         data = response.json()
-        assert data["detail"] == "Character with ID 99999 not found."
+        assert data["detail"] == "ORM model with ID 99999 not found."
 
     async def test_search_characters(self, client: AsyncClient) -> None:
         """Test searching for characters by name."""

@@ -4,9 +4,8 @@ import logging
 
 from fastapi import APIRouter, HTTPException, Path, Query
 
-from src.characters.exceptions import CharacterNotFoundException
-from src.characters.schemas import CharacterOut
 from src.depends import FilmServiceDI
+from src.exceptions import ORMNotFoundException
 from src.films.schemas import FilmOut
 from src.utils.schemas import Page
 
@@ -46,6 +45,6 @@ async def retrieve_films(
     """Fetch and store all characters in DB."""
     try:
         character = await FilmServiceDI.get(id=id)
-    except CharacterNotFoundException as e:
+    except ORMNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail) from e
     return FilmOut.model_validate(character)
