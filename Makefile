@@ -31,8 +31,8 @@ deps:
 	pip install -r uv-requirements.txt
 	uv sync
 
-test: # Run tests
-	docker compose run --rm fastapi pytest -vv --cov --cov-report=xml
+test: # Run tests #--cov --cov-report=xml
+	docker compose run --rm fastapi pytest -vv --cov=.
 
 build:
 	docker compose build
