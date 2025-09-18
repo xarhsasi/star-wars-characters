@@ -14,6 +14,7 @@ from src.characters.service import CharacterService
 from src.films.models import Film
 from src.films.service import FilmService
 from src.starships.models import Starship
+from src.starships.service import StarshipService
 from src.users.repository import UserRepository
 from src.utils.session import async_session
 
@@ -30,6 +31,7 @@ shell_vars = {
     "Character": Character,
     "character_service": CharacterService(session=session),
     "film_service": FilmService(session=session),
+    "starship_service": StarshipService(session=session),
     # Add any other objects you want to auto-load here
 }
 
