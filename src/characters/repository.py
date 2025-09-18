@@ -8,4 +8,4 @@ class CharacterRepository(Repository[Character]):
     """Character repository."""
 
     _model = Character
-    QUERY_ATTR = "name"
+    SEARCH_QUERY_ATTR = "name"

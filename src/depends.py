@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.characters.service import CharacterService
 from src.films.service import FilmService
+from src.starships.service import StarshipService
 from src.utils.session import get_session
 
 
@@ -25,3 +26,12 @@ def get_film_service(
 
 
 FilmServiceDI = Annotated[FilmService, Depends(get_film_service)]
+
+
+def get_starship_service(
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> StarshipService:
+    return StarshipService(session)
+
+
+StarshipServiceDI = Annotated[StarshipService, Depends(get_starship_service)]

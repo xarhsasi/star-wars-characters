@@ -19,7 +19,7 @@ class Repository(Generic[_T]):
     This class does not handle transactions and commits .
     """
 
-    QUERY_ATTR: str  # Attribute to search by in `search()`
+    SEARCH_QUERY_ATTR: str  # Attribute to search by in `search()`
 
     _model: Type[_T]
 
@@ -63,7 +63,7 @@ class Repository(Generic[_T]):
 
     async def search(self, query: str) -> Sequence[_T]:
         """Search rows of the model by name. Default limit is 100."""
-        attr = getattr(self._model, self.QUERY_ATTR)
+        attr = getattr(self._model, self.SEARCH_QUERY_ATTR)
         if not attr:
             raise RuntimeError("Query attribute is not set")
         stmt = (

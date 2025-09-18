@@ -9,4 +9,4 @@ class FilmRepository(Repository[Film]):
 
     _model = Film
 
-    QUERY_ATTR = "title"
+    SEARCH_QUERY_ATTR = "title"

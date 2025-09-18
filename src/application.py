@@ -9,6 +9,7 @@ from src.characters.router import characters_router
 from src.films.router import films_router
 from src.routers import base_router
 from src.settings import settings
+from src.starships.router import starships_router
 
 # from src.users.router import user_router
 from src.version import __version__
@@ -56,6 +57,7 @@ def create_application() -> FastAPI:
     application.include_router(base_router, prefix=settings.API_STR)
     application.include_router(characters_router, prefix=settings.API_STR)
     application.include_router(films_router, prefix=settings.API_STR)
+    application.include_router(starships_router, prefix=settings.API_STR)
 
     # event handler
     application.add_event_handler("startup", startup_handler)
