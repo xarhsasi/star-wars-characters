@@ -5,6 +5,7 @@ description = "Star Wars Characters"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "aiohttp>=3.12.15",
     "alembic>=1.16.5",
     "asyncpg>=0.30.0",
     "celery>=5.5.3",
@@ -17,6 +18,7 @@ dependencies = [
     "pydantic-settings>=2.10.1",
     "redis>=6.4.0",
     "sqlalchemy[asyncio]>=2.0.43",
+    "yarl>=1.20.1",
 ]
 
 [dependency-groups]
