@@ -15,8 +15,6 @@ class CharacterOut(BaseModel):
     eye_color: str | None = None
     birth_year: str | None = None
     gender: str | None = None
-    edited: datetime | None = None
-    created: datetime | None = None
     url: str | None = None
 
     @model_validator(mode="after")
