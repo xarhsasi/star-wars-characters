@@ -27,7 +27,7 @@ class Character(Base, Timestamps):
     eye_color: Mapped[str] = mapped_column(String, nullable=True)
     birth_year: Mapped[str] = mapped_column(String, nullable=True)
     gender: Mapped[str] = mapped_column(String, nullable=True)
-    url: Mapped[str] = mapped_column(String, nullable=True)
+    url: Mapped[str] = mapped_column(String, unique=True, index=True)
 
     films: Mapped[list["Film"]] = relationship(
         "Film", secondary=film_characters, back_populates="characters"

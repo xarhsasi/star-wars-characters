@@ -35,6 +35,13 @@ class GetORMService(ORMBaseService, Generic[_T]):
             raise ORMNotFoundException(id=id)
         return obj
 
+    async def by_url(self, url: str) -> _T:
+        """Retrieve a character by URL."""
+        obj = await self._repository.by_url(url=url)
+        if not obj:
+            raise ORMNotFoundException(id=url)
+        return obj
+
 
 class ListPaginationORMService(ORMBaseService, Generic[_T]):
     """List all ORM models with pagination."""
@@ -56,6 +63,16 @@ class ListPaginationORMService(ORMBaseService, Generic[_T]):
             page_size=page_size,
             pages=ceil(total / page_size) if total else 1,
         )
+
+    async def list_all(self) -> AsyncGenerator[Sequence[_T]]:
+        """List all characters without pagination."""
+        offset = 0
+        while True:
+            batch = await self._repository.list(limit=self.BATCH_SIZE, offset=offset)
+            if not batch:
+                break
+            yield batch
+            offset += self.BATCH_SIZE
 
 
 class SearchORMService(ORMBaseService, Generic[_T]):

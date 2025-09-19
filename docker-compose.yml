@@ -73,6 +73,7 @@ services:
       - postgres
       - migrator
       - redis
+      - fastapi
 
   celerybeat:
     <<: *fastapi-common
@@ -82,3 +83,4 @@ services:
       - postgres
       - migrator
       - redis
+      - fastapi

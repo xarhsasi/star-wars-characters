@@ -24,7 +24,7 @@ class Film(Base, Timestamps):
     director: Mapped[str] = mapped_column(String, nullable=True)
     producer: Mapped[str] = mapped_column(String, nullable=True)
     release_date: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
-    url: Mapped[str] = mapped_column(String, unique=True, nullable=True)
+    url: Mapped[str] = mapped_column(String, unique=True, index=True)
     characters: Mapped[list["Character"]] = relationship(
         "Character", secondary=film_characters, back_populates="films"
     )

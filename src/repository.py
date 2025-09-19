@@ -38,6 +38,13 @@ class Repository(Generic[_T]):
         """Get a model by primary key."""
         return await self.session.get(self._model, id)
 
+    async def by_url(self, url: str) -> _T | None:
+        """Get a model by URL."""
+        result = await self.session.execute(
+            select(self._model).where(self._model.url == url)
+        )
+        return result.scalars().first()
+
     async def update(self, obj: _T) -> _T:
         """Persist changes to an object."""
         merged = await self.session.merge(obj)  # returns the persistent instance
