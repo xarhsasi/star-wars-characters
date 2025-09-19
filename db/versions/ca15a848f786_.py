@@ -1,8 +1,8 @@
-"""initial table creation
+"""
 
-Revision ID: 54e5acfb1f78
+Revision ID: ca15a848f786
 Revises:
-Create Date: 2025-09-17 17:14:08.932843
+Create Date: 2025-09-19 15:53:40.256074
 
 """
 
@@ -10,9 +10,10 @@ from typing import Sequence, Union
 
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "54e5acfb1f78"
+revision: str = "ca15a848f786"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -31,6 +32,7 @@ def upgrade() -> None:
         sa.Column("eye_color", sa.String(), nullable=True),
         sa.Column("birth_year", sa.String(), nullable=True),
         sa.Column("gender", sa.String(), nullable=True),
+        sa.Column("url", sa.String(), nullable=False),
         sa.Column(
             "created_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False
         ),
@@ -40,14 +42,15 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_characters_name"), "characters", ["name"], unique=False)
+    op.create_index(op.f("ix_characters_url"), "characters", ["url"], unique=True)
     op.create_table(
         "films",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("title", sa.String(), nullable=False),
-        sa.Column("opening_crawl", sa.String(), nullable=False),
-        sa.Column("director", sa.String(), nullable=False),
-        sa.Column("producer", sa.String(), nullable=False),
-        sa.Column("release_date", sa.DateTime(), nullable=False),
+        sa.Column("opening_crawl", sa.String(), nullable=True),
+        sa.Column("director", sa.String(), nullable=True),
+        sa.Column("producer", sa.String(), nullable=True),
+        sa.Column("release_date", sa.DateTime(), nullable=True),
         sa.Column("url", sa.String(), nullable=False),
         sa.Column(
             "created_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False
@@ -56,25 +59,25 @@ def upgrade() -> None:
             "updated_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False
         ),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("url"),
     )
     op.create_index(op.f("ix_films_title"), "films", ["title"], unique=False)
+    op.create_index(op.f("ix_films_url"), "films", ["url"], unique=True)
     op.create_table(
         "starships",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("name", sa.String(), nullable=False),
-        sa.Column("model", sa.String(), nullable=False),
-        sa.Column("manufacturer", sa.String(), nullable=False),
-        sa.Column("cost_in_credits", sa.String(), nullable=False),
-        sa.Column("length", sa.String(), nullable=False),
-        sa.Column("max_atmosphering_speed", sa.String(), nullable=False),
-        sa.Column("crew", sa.String(), nullable=False),
-        sa.Column("passengers", sa.String(), nullable=False),
-        sa.Column("cargo_capacity", sa.String(), nullable=False),
-        sa.Column("consumables", sa.String(), nullable=False),
-        sa.Column("hyperdrive_rating", sa.String(), nullable=False),
-        sa.Column("mglt", sa.String(), nullable=False),
-        sa.Column("starship_class", sa.String(), nullable=False),
+        sa.Column("model", sa.String(), nullable=True),
+        sa.Column("manufacturer", sa.String(), nullable=True),
+        sa.Column("cost_in_credits", sa.String(), nullable=True),
+        sa.Column("length", sa.String(), nullable=True),
+        sa.Column("max_atmosphering_speed", sa.String(), nullable=True),
+        sa.Column("crew", sa.String(), nullable=True),
+        sa.Column("passengers", sa.String(), nullable=True),
+        sa.Column("cargo_capacity", sa.String(), nullable=True),
+        sa.Column("consumables", sa.String(), nullable=True),
+        sa.Column("hyperdrive_rating", sa.String(), nullable=True),
+        sa.Column("mglt", sa.String(), nullable=True),
+        sa.Column("starship_class", sa.String(), nullable=True),
         sa.Column("url", sa.String(), nullable=False),
         sa.Column(
             "created_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False
@@ -83,9 +86,9 @@ def upgrade() -> None:
             "updated_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False
         ),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("url"),
     )
     op.create_index(op.f("ix_starships_name"), "starships", ["name"], unique=False)
+    op.create_index(op.f("ix_starships_url"), "starships", ["url"], unique=True)
     op.create_table(
         "user",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -121,21 +124,70 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["startship_id"], ["starships.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("film_id", "startship_id"),
     )
+    op.drop_table("celery_taskmeta")
+    op.drop_table("celery_tasksetmeta")
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     """Downgrade schema."""
     # ### commands auto generated by Alembic - please adjust! ###
+    op.create_table(
+        "celery_tasksetmeta",
+        sa.Column("id", sa.INTEGER(), autoincrement=False, nullable=False),
+        sa.Column(
+            "taskset_id", sa.VARCHAR(length=155), autoincrement=False, nullable=True
+        ),
+        sa.Column("result", postgresql.BYTEA(), autoincrement=False, nullable=True),
+        sa.Column(
+            "date_done", postgresql.TIMESTAMP(), autoincrement=False, nullable=True
+        ),
+        sa.PrimaryKeyConstraint("id", name=op.f("celery_tasksetmeta_pkey")),
+        sa.UniqueConstraint(
+            "taskset_id",
+            name=op.f("celery_tasksetmeta_taskset_id_key"),
+            postgresql_include=[],
+            postgresql_nulls_not_distinct=False,
+        ),
+    )
+    op.create_table(
+        "celery_taskmeta",
+        sa.Column("id", sa.INTEGER(), autoincrement=False, nullable=False),
+        sa.Column(
+            "task_id", sa.VARCHAR(length=155), autoincrement=False, nullable=True
+        ),
+        sa.Column("status", sa.VARCHAR(length=50), autoincrement=False, nullable=True),
+        sa.Column("result", postgresql.BYTEA(), autoincrement=False, nullable=True),
+        sa.Column(
+            "date_done", postgresql.TIMESTAMP(), autoincrement=False, nullable=True
+        ),
+        sa.Column("traceback", sa.TEXT(), autoincrement=False, nullable=True),
+        sa.Column("name", sa.VARCHAR(length=155), autoincrement=False, nullable=True),
+        sa.Column("args", postgresql.BYTEA(), autoincrement=False, nullable=True),
+        sa.Column("kwargs", postgresql.BYTEA(), autoincrement=False, nullable=True),
+        sa.Column("worker", sa.VARCHAR(length=155), autoincrement=False, nullable=True),
+        sa.Column("retries", sa.INTEGER(), autoincrement=False, nullable=True),
+        sa.Column("queue", sa.VARCHAR(length=155), autoincrement=False, nullable=True),
+        sa.PrimaryKeyConstraint("id", name=op.f("celery_taskmeta_pkey")),
+        sa.UniqueConstraint(
+            "task_id",
+            name=op.f("celery_taskmeta_task_id_key"),
+            postgresql_include=[],
+            postgresql_nulls_not_distinct=False,
+        ),
+    )
     op.drop_table("starship_films")
     op.drop_table("film_characters")
     op.drop_index(op.f("ix_user_id"), table_name="user")
     op.drop_index(op.f("ix_user_email"), table_name="user")
     op.drop_table("user")
+    op.drop_index(op.f("ix_starships_url"), table_name="starships")
     op.drop_index(op.f("ix_starships_name"), table_name="starships")
     op.drop_table("starships")
+    op.drop_index(op.f("ix_films_url"), table_name="films")
     op.drop_index(op.f("ix_films_title"), table_name="films")
     op.drop_table("films")
+    op.drop_index(op.f("ix_characters_url"), table_name="characters")
     op.drop_index(op.f("ix_characters_name"), table_name="characters")
     op.drop_table("characters")
     # ### end Alembic commands ###
