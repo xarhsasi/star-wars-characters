@@ -2,10 +2,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.characters.models import Character
 from src.characters.repository import CharacterRepository
-from src.service import GetORMService, ListPaginationORMService, SearchORMService
+from src.service import (
+    CreateORMService,
+    GetORMService,
+    ListPaginationORMService,
+    SearchORMService,
+)
 
 
 class CharacterService(
+    CreateORMService[Character],
     GetORMService[Character],
     ListPaginationORMService[Character],
     SearchORMService[Character],

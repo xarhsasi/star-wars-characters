@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 class Plugin:
     """Base class for plugins to interact with external APIs."""
 
+    NAME: str  # Unique name for the plugin
+
     API_TIMEOUT: int = 10  # seconds
     auth: aiohttp.BasicAuth | None = None
 

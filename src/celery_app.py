@@ -6,7 +6,7 @@ from celery.signals import setup_logging
 
 from src.settings import settings
 
-app = Celery("mailgenie", broker=settings.CELERY_CONFIG.broker_url)
+app = Celery("star_wars_characters", broker=settings.CELERY_CONFIG.broker_url)
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
@@ -15,7 +15,7 @@ app = Celery("mailgenie", broker=settings.CELERY_CONFIG.broker_url)
 app.config_from_object(settings.CELERY_CONFIG)
 
 # Load task modules from all domains.
-app.autodiscover_tasks(packages=[])
+app.autodiscover_tasks(packages=["src.integrations.crontabs", "src.integrations.tasks"])
 
 
 @setup_logging.connect

@@ -1,6 +1,5 @@
 """Base settings class contains only important fields."""
 
-# mypy: ignore-errors
 import logging
 from pathlib import Path
 from typing import List

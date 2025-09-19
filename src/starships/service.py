@@ -1,11 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.service import GetORMService, ListPaginationORMService, SearchORMService
+from src.service import (
+    CreateORMService,
+    GetORMService,
+    ListPaginationORMService,
+    SearchORMService,
+)
 from src.starships.models import Starship
 from src.starships.repository import StarshipRepository
 
 
 class StarshipService(
+    CreateORMService[Starship],
     GetORMService[Starship],
     ListPaginationORMService[Starship],
     SearchORMService[Starship],

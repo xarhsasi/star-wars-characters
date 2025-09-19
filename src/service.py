@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from math import ceil
-from typing import Generic, Sequence, TypeVar
+from typing import AsyncGenerator, Generic, Sequence, TypeVar
 
 from src.exceptions import ORMNotFoundException
 from src.repository import Repository
@@ -15,6 +15,14 @@ class ORMBaseService:
 
     def __init__(self, repository: Repository):
         self._repository = repository
+
+
+class CreateORMService(ORMBaseService, Generic[_T]):
+    """Create a new ORM model."""
+
+    async def create(self, obj: _T) -> _T:
+        """Create a new character."""
+        return await self._repository.create(obj=obj)
 
 
 class GetORMService(ORMBaseService, Generic[_T]):
@@ -31,7 +39,9 @@ class GetORMService(ORMBaseService, Generic[_T]):
 class ListPaginationORMService(ORMBaseService, Generic[_T]):
     """List all ORM models with pagination."""
 
-    async def list(self, *, page: int = 1, page_size: int = 50) -> Page:
+    BATCH_SIZE = 50
+
+    async def list(self, *, page: int = 1, page_size: int = BATCH_SIZE) -> Page:
         """List all characters."""
         page = max(1, page)
         page_size = max(1, min(page_size, 1000))

@@ -64,3 +64,21 @@ services:
     container_name: starwars_redis
     ports:
       - 6379:6379
+
+  celeryworker:
+    <<: *fastapi-common
+    container_name: starwars_celeryworker
+    command: /start-celeryworker
+    depends_on:
+      - postgres
+      - migrator
+      - redis
+
+  celerybeat:
+    <<: *fastapi-common
+    container_name: starwars_celerybeat
+    command: /start-celerybeat
+    depends_on:
+      - postgres
+      - migrator
+      - redis

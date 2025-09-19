@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, Integer, String
@@ -30,3 +31,19 @@ class Film(Base, Timestamps):
     starships: Mapped[list["Starship"]] = relationship(
         "Starship", secondary=starship_films, back_populates="films"
     )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Film":
+        """Create a Film instance from a dictionary."""
+        release_date = data.get("release_date")
+        if release_date:
+            release_date = datetime.datetime.fromisoformat(release_date)
+
+        return cls(
+            title=data["title"],
+            opening_crawl=data.get("opening_crawl"),
+            director=data.get("director"),
+            producer=data.get("producer"),
+            release_date=release_date,
+            url=data.get("url"),
+        )

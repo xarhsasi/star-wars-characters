@@ -35,3 +35,12 @@ RUN chmod +x /initialize && sed -i 's/\r$//' /initialize
 # Copy start migrate script
 COPY ./scripts/migrate /migrate
 RUN chmod +x /migrate && sed -i 's/\r$//' /migrate
+
+# Copy start migrate script
+COPY ./scripts/start-celerybeat /start-celerybeat
+RUN chmod +x /start-celerybeat && sed -i 's/\r$//' /start-celerybeat
+
+
+# Copy start migrate script
+COPY ./scripts/start-celeryworker /start-celeryworker
+RUN chmod +x /start-celeryworker && sed -i 's/\r$//' /start-celeryworker

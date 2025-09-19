@@ -2,11 +2,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.films.models import Film
 from src.films.repository import FilmRepository
-from src.service import GetORMService, ListPaginationORMService, SearchORMService
+from src.service import (
+    CreateORMService,
+    GetORMService,
+    ListPaginationORMService,
+    SearchORMService,
+)
 
 
 class FilmService(
-    GetORMService[Film], ListPaginationORMService[Film], SearchORMService[Film]
+    CreateORMService[Film],
+    GetORMService[Film],
+    ListPaginationORMService[Film],
+    SearchORMService[Film],
 ):
     """Film service."""
 
