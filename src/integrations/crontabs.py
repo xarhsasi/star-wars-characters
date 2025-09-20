@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 def setup_periodic_tasks(sender, **_):
     """Setup periodic tasks for integrations."""
     sender.add_periodic_task(
-        crontab(minute="*/1"),
+        crontab(minute="*/5"),
         sync_plugins_with_db.s(),
         name="sync plugins with db every 1 minutes",
-    )  # every 1 minutes
+    )  # every 5 minutes

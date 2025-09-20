@@ -11,6 +11,6 @@ class User(Base, Timestamps):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     email: Mapped[str] = mapped_column(unique=True, index=True)
-    password: Mapped[str] = mapped_column()
+    password: Mapped[str] = mapped_column(String(200))
     full_name: Mapped[str] = mapped_column(String(200))
     is_active: Mapped[bool] = mapped_column(default=False)

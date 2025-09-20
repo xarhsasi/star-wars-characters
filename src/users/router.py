@@ -1,54 +1,65 @@
 import http
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, HTTPException
 
-from src.depends import get_db
+from src.depends import UserServiceDI
 from src.users.constants import (
-    LIST_USERS_API_DESCRIPTION,
+    CREATE_USERS_API_DESCRIPTION,
     USERS_AUTHENTICATION_API_DESCRIPTION,
 )
-from src.users.repository import UserRepository
-from src.users.schemas import UserAuth, UserResponse, UserWithCredentials
-from src.utils.jwt import JwtAuthenticationService, JwtHTTPBearer
+from src.users.exceptions import UserAlreadyExistsError
+from src.users.models import User
+from src.users.schemas import UserAuth, UserCreate, UserResponse, UserWithCredentials
 from src.utils.password import BCryptPasswordService
 
 logger = logging.getLogger(__name__)
 
 APP_NAME = "users"
-user_router = APIRouter(prefix=f"/{APP_NAME}", tags=[APP_NAME])
+users_router = APIRouter(prefix=f"/{APP_NAME}", tags=[APP_NAME])
 
 
-@user_router.post("/auth", description=USERS_AUTHENTICATION_API_DESCRIPTION)
+@users_router.post("/auth", description=USERS_AUTHENTICATION_API_DESCRIPTION)
 async def authenticate(
+    UserServiceDI: UserServiceDI,
     user_auth: UserAuth,
-    db: Session = Depends(get_db),
 ) -> UserWithCredentials:
     if not user_auth:
         raise HTTPException(
             status_code=http.HTTPStatus.BAD_REQUEST,
             detail="Invalid credentials",
         )
-    user = await UserRepository(session=db).authenticate_user(
-        username=user_auth.email,
+
+    user = await UserServiceDI.authenticate(
+        email=user_auth.email,
         password=user_auth.password,
         password_service=BCryptPasswordService(),
     )
-    jwt_token = JwtAuthenticationService().encode(user_id=user.id)
+    jwt_token = await UserServiceDI.token(user=user)
     return UserWithCredentials(
         id=user.id, full_name=user.full_name, email=user.email, token=jwt_token
     )
 
 
-@user_router.get(
-    "/",
-    description=LIST_USERS_API_DESCRIPTION,
-    dependencies=[Depends(JwtHTTPBearer())],
-)
-async def list_users(
-    db: Session = Depends(get_db),
-) -> list[UserResponse]:
-    user_service = UserRepository(session=db)
-    users = list(await user_service.users())
-    return users
+@users_router.post("/register", description=CREATE_USERS_API_DESCRIPTION)
+async def create(
+    UserServiceDI: UserServiceDI,
+    user_create: UserCreate,
+) -> UserResponse:
+    user = User(
+        full_name=user_create.full_name,
+        email=user_create.email,
+        password=user_create.password,
+    )
+    try:
+        u = await UserServiceDI.create(obj=user)
+    except UserAlreadyExistsError as e:
+        raise HTTPException(
+            status_code=http.HTTPStatus.BAD_REQUEST,
+            detail=e.message,
+        ) from e
+
+    jwt_token = await UserServiceDI.token(user=u)
+    return UserWithCredentials(
+        id=user.id, full_name=user.full_name, email=user.email, token=jwt_token
+    )

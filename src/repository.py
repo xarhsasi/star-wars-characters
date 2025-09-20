@@ -6,6 +6,8 @@ from sqlalchemy import func, inspect, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from src.exceptions import ORMNotFoundException
+
 _T = TypeVar("_T")  # ORM model type
 
 
@@ -57,14 +59,20 @@ class Repository(Generic[_T]):
         )
         return result.scalars().first()
 
-    async def update(self, obj: _T) -> _T:
+    async def update(self, id: int, attrs: dict) -> _T:
         """Persist changes to an object."""
-        merged = await self.session.merge(
-            obj, options=await self._eager_options_for_all()
-        )  # returns the persistent instance
+        db_obj = await self.get(id=id)
+        if not db_obj:
+            return ORMNotFoundException(id=id)
+
+        for k, v in attrs.items():
+            if k not in {"id", "created_at", "updated_at"} and hasattr(db_obj, k):
+                setattr(db_obj, k, v)
+
+        self.session.add(db_obj)
         await self.session.flush()
-        await self.session.refresh(merged)
-        return merged
+        await self.session.refresh(db_obj)
+        return db_obj
 
     async def delete(self, obj: _T) -> None:
         """Delete an object."""

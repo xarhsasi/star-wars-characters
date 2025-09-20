@@ -1,6 +1,11 @@
+import asyncpg
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.exceptions import ORMDuplicateException
+from src.repository import Repository
+from src.service import CreateORMService, GetORMService, ORMBaseService
 from src.users.exceptions import (
+    UserAlreadyExistsError,
     UserBadCredentials,
 )
 from src.users.models import User
@@ -11,12 +16,29 @@ from src.utils.password import (
 )
 
 
-class UserAuthenticationService:
-    """Service class for authentication-related operations."""
+class UserService(GetORMService[User], CreateORMService[User]):
+    """Service class for user-related operations."""
 
     def __init__(self, session: AsyncSession):
         self.session = session
-        self.user_repository = UserRepository(session=session)
+        self._repository = UserRepository(session=session)
+
+    async def create(self, obj: User) -> User:
+        """Create a new user with hashed password."""
+        if not obj.password:
+            raise ValueError("Password must be provided")
+
+        async with self.session.begin():
+            password_service = BCryptPasswordService()
+            hashed_password = password_service.hash(plain_password=obj.password)
+            obj.password = hashed_password
+
+            try:
+                create = await super().create(obj=obj)
+            except ORMDuplicateException as e:
+                raise UserAlreadyExistsError(email=obj.email) from e
+
+            return create
 
     async def authenticate(
         self,
@@ -28,7 +50,7 @@ class UserAuthenticationService:
 
         If user is not found or password does not match, raises UserBadCredentials.
         """
-        user = self.user_repository.by_email(email=email)
+        user = await self._repository.by_email(email=email)
         if user is None:
             raise UserBadCredentials()
 
@@ -39,10 +61,10 @@ class UserAuthenticationService:
 
         return user
 
+    async def token(self, user: User) -> str:
+        """Generate a JWT token for the given user."""
+        from src.utils.jwt import JwtAuthenticationService
 
-class UserService:
-    """Service class for user-related operations."""
-
-    def __init__(self, session: AsyncSession):
-        self.session = session
-        self.authentication_service = UserAuthenticationService(session=session)
+        jwt_service = JwtAuthenticationService()
+        token = jwt_service.encode(user_id=str(user.id))
+        return token
