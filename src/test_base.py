@@ -70,8 +70,12 @@ class RouterTestRetrieve(RouterTestBase):
         assert response.status_code == http.HTTPStatus.OK
 
         data = response.json()
-        mapper = inspect(type(entity))  # mapper for the class (or: inspect(obj).mapper)
-        column_names = {a.key for a in mapper.column_attrs}
+
+        mapper = inspect(type(entity))
+        column_names = {a.key for a in mapper.column_attrs}  # include columns
+        column_names.update(
+            {a.key for a in mapper.relationships}
+        )  # include relationships
         for key, value in data.items():
             assert key in column_names, f"Unexpected key in response: {key}"
             orm_val = getattr(entity, key)

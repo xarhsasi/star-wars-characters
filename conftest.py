@@ -85,6 +85,7 @@ class CharacterFactory(AsyncSQLAlchemyFactory):
     hair_color = factory.Faker("color_name")
     skin_color = factory.Faker("color_name")
     eye_color = factory.Faker("color_name")
+    url = factory.Sequence(lambda n: f"https://example.invalid/film-{n}")
 
 
 class FilmFactory(AsyncSQLAlchemyFactory):
@@ -96,6 +97,7 @@ class FilmFactory(AsyncSQLAlchemyFactory):
     title = factory.Faker("sentence", nb_words=3)
     director = factory.Faker("name")
     producer = factory.Faker("name")
+    url = factory.Sequence(lambda n: f"https://example.invalid/film-{n}")
 
 
 class StarshipFactory(AsyncSQLAlchemyFactory):
@@ -106,19 +108,8 @@ class StarshipFactory(AsyncSQLAlchemyFactory):
 
     name = factory.Faker("word")
     model = factory.Faker("word")
-    manufacturer = factory.Faker("company")
-    cost_in_credits = factory.Faker("random_int", min=1000, max=1000000)
-    length = factory.Faker("random_int", min=10, max=300)
-    max_atmosphering_speed = factory.Faker("random_int", min=100, max=2000)
-    crew = factory.Faker("random_int", min=1, max=1000)
-    passengers = factory.Faker("random_int", min=0, max=1000)
-    cargo_capacity = factory.Faker("random_int", min=100, max=100000)
-    consumables = factory.Faker("word")
-    hyperdrive_rating = factory.Faker(
-        "pyfloat", left_digits=1, right_digits=2, positive=True
-    )
-    mglt = factory.Faker("random_int", min=10, max=100)
     starship_class = factory.Faker("word")
+    url = factory.Sequence(lambda n: f"https://example.invalid/film-{n}")
 
 
 @pytest.fixture(autouse=True)

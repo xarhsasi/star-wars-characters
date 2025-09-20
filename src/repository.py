@@ -37,18 +37,31 @@ class Repository(Generic[_T]):
 
     async def get(self, id: int) -> _T | None:
         """Get a model by primary key."""
-        return await self.session.get(self._model, id)
+        stmt = (
+            select(self._model)
+            .options(
+                *(await self._eager_options_for_all())  # lazy load all relationships
+            )
+            .where(self._model.id == id)
+        )
+        return await self.session.scalar(stmt)
 
     async def by_url(self, url: str) -> _T | None:
         """Get a model by URL."""
         result = await self.session.execute(
-            select(self._model).where(self._model.url == url)
+            select(self._model)
+            .options(
+                *(await self._eager_options_for_all())  # lazy load all relationships
+            )
+            .where(self._model.url == url)
         )
         return result.scalars().first()
 
     async def update(self, obj: _T) -> _T:
         """Persist changes to an object."""
-        merged = await self.session.merge(obj)  # returns the persistent instance
+        merged = await self.session.merge(
+            obj, options=await self._eager_options_for_all()
+        )  # returns the persistent instance
         await self.session.flush()
         await self.session.refresh(merged)
         return merged
@@ -82,6 +95,9 @@ class Repository(Generic[_T]):
             raise RuntimeError("Query attribute is not set")
         stmt = (
             select(self._model)
+            .options(
+                *(await self._eager_options_for_all())  # lazy load all relationships
+            )
             .where(attr.ilike(f"%{query}%"))
             .order_by(self._model.id)
             .limit(50)
