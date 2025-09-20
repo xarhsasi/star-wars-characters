@@ -81,10 +81,3 @@ class TestFilmServce:
         await self.service.add_films(new_films_data)
         added_film = await self.service.by_url("http://swapi.dev/api/films/100/")
         assert added_film.title == "Another New Film"
-
-    # async def test_create_relationships(self) -> None:
-    #     """Test creating relationships for a film."""
-    #     film = self.entities[0]
-    #     await self.service.create_relationships(film.id)
-    #     updated_film = await self.service.get(film.id)
-    #     assert len(updated_film.characters) >= 0
