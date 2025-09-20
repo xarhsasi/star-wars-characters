@@ -21,7 +21,7 @@ class UserBadCredentials(UserException):
     """Exception raised when a user is not found."""
 
     def __init__(self):
-        self.message = f"Bad Credentials"
+        self.message = "Bad Credentials"
         super().__init__(self.message)
 
 

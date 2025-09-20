@@ -2,7 +2,6 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from src.characters.models import Character
 from src.characters.service import CharacterService
 from src.exceptions import ORMNotFoundException
 

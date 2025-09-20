@@ -16,7 +16,6 @@ from src.films.service import FilmService
 from src.integrations.swapi.plugin import SwapiPlugin
 from src.starships.models import Starship
 from src.starships.service import StarshipService
-from src.users.repository import UserRepository
 from src.utils.session import async_session
 
 # Optionally add more imports or utilities

@@ -1,24 +1,17 @@
 import logging
 
-import sqlalchemy
-import sqlalchemy.exc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.exceptions import (
-    ORMDuplicateException,
-    ORMNotFoundException,
     ServicePermissionDenied,
 )
-from src.films.models import Film
 from src.films.repository import FilmRepository
 from src.service import (
     CreateORMService,
     GetORMService,
     ListPaginationORMService,
-    ORMBaseService,
     UpdateORMService,
 )
-from src.users.models import User
 from src.users.repository import UserRepository
 from src.votes.model import Vote
 from src.votes.repository import VoteRepository

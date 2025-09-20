@@ -1,5 +1,3 @@
-from sqlalchemy import Sequence, select
-
 from src.characters.models import Character
 from src.repository import Repository
 

@@ -1,15 +1,12 @@
 import http
 from typing import Annotated
 
-import jwt
 from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.characters.service import CharacterService
 from src.films.service import FilmService
-from src.settings import settings
 from src.starships.service import StarshipService
 from src.users.service import UserService
 from src.utils.jwt import JwtAuthenticationService, JwtHTTPBearer

@@ -1,9 +1,7 @@
-import asyncpg
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.exceptions import ORMDuplicateException
-from src.repository import Repository
-from src.service import CreateORMService, GetORMService, ORMBaseService
+from src.service import CreateORMService, GetORMService
 from src.users.exceptions import (
     UserAlreadyExistsError,
     UserBadCredentials,

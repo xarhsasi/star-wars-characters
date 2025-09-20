@@ -15,8 +15,8 @@ repos:
       - id: check-toml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.1
+    rev: v0.6.9
     hooks:
       - id: ruff
-        args: ["--fix", "--select", "I"] # I For isort integration
+        args: ["--fix"]
       - id: ruff-format

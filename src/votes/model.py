@@ -1,13 +1,11 @@
 from sqlalchemy import (
-    DateTime,
     ForeignKey,
     Integer,
     SmallInteger,
     String,
     UniqueConstraint,
-    func,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.films.models import Film
 from src.models import Base, Timestamps

@@ -14,7 +14,7 @@ class ORMDuplicateException(Exception):
     """Exception raised when a duplicate entry is attempted."""
 
     def __init__(self):
-        self.detail = f"Duplicate ORM object."
+        self.detail = "Duplicate ORM object."
         self.status_code = http.HTTPStatus.CONFLICT
         super().__init__(self.detail)
 

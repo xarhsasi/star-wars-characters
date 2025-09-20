@@ -4,7 +4,6 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from conftest import StarshipFactory
-from src.characters.models import Character
 from src.starships.models import Starship
 from src.starships.service import StarshipService
 

@@ -6,6 +6,7 @@ Just by importing the models in the __init__.py file of the package and
 importing the module src.__init__ in the alembic env.py file.
 """
 
+# ruff: noqa: F401
 from src.characters.models import Character
 from src.films.models import Film
 from src.models import film_characters, starship_films

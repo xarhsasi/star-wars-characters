@@ -1,17 +1,15 @@
 """This module contains the characters router for the FastAPI application."""
 
-import http
 import logging
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
 
-from src.depends import FilmServiceDI, VoteServiceDI, get_user_id, jwt_bearer
+from src.depends import VoteServiceDI, get_user_id
 from src.exceptions import (
     ORMDuplicateException,
     ORMNotFoundException,
     ServicePermissionDenied,
 )
-from src.films.schemas import FilmOut
 from src.utils.schemas import Page
 from src.votes.schemas import VoteOut
 
