@@ -4,7 +4,7 @@ import pytest
 
 from conftest import FilmFactory
 from src.films.models import Film
-from src.test_base import RouterTestList, RouterTestRetrieve, RouterTestSearch
+from src.test_router_base import RouterTestList, RouterTestRetrieve, RouterTestSearch
 
 logger = logging.getLogger(__name__)
 

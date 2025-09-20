@@ -4,7 +4,7 @@ import pytest
 
 from conftest import StarshipFactory
 from src.starships.models import Starship
-from src.test_base import RouterTestList, RouterTestRetrieve, RouterTestSearch
+from src.test_router_base import RouterTestList, RouterTestRetrieve, RouterTestSearch
 
 logger = logging.getLogger(__name__)
 

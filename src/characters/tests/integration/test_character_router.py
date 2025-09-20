@@ -4,7 +4,7 @@ import pytest
 
 from conftest import CharacterFactory
 from src.characters.models import Character
-from src.test_base import RouterTestList, RouterTestRetrieve, RouterTestSearch
+from src.test_router_base import RouterTestList, RouterTestRetrieve, RouterTestSearch
 
 logger = logging.getLogger(__name__)
 
