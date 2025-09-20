@@ -38,5 +38,3 @@ class StarshipService(
                     await self.by_url(url=starship.url)
                 except ORMNotFoundException:
                     await self.create(obj=starship)
-
-            await self.session.commit()

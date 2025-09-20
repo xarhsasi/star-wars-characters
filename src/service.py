@@ -71,7 +71,8 @@ class ListPaginationORMService(ORMBaseService, Generic[_T]):
             batch = await self._repository.list(limit=self.BATCH_SIZE, offset=offset)
             if not batch:
                 break
-            yield batch
+            for item in batch:
+                yield item
             offset += self.BATCH_SIZE
 
 

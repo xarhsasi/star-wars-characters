@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from typing import Generic, Sequence, Type, TypeVar
 
-from sqlalchemy import func, select
+from sqlalchemy import func, inspect, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 _T = TypeVar("_T")  # ORM model type
 
@@ -60,7 +61,13 @@ class Repository(Generic[_T]):
     async def list(self, *, limit: int, offset: int) -> Sequence[_T]:
         """Return all rows of the model."""
         result = await self.session.execute(
-            select(self._model).order_by(self._model.id).limit(limit).offset(offset)
+            select(self._model)
+            .options(
+                *(await self._eager_options_for_all())  # lazy load all relationships
+            )
+            .order_by(self._model.id)
+            .limit(limit)
+            .offset(offset)
         )
         return result.scalars().all()
 
@@ -81,3 +88,14 @@ class Repository(Generic[_T]):
         )
         result = await self.session.execute(stmt)
         return result.scalars().all()
+
+    async def _eager_options_for_all(self):
+        """Return a list of selectinload options for all relationships.
+
+        This is used to avoid the N+1 problem when loading relationships.
+        Subclasses can override this method to customize which relationships
+        to eagerly load.
+        """
+        mapper = inspect(self._model)
+        relationship_names = list(mapper.relationships.keys())
+        return [selectinload(getattr(self._model, name)) for name in relationship_names]

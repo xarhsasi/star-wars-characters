@@ -36,5 +36,3 @@ class CharacterService(
                     await self.by_url(url=character.url)
                 except ORMNotFoundException:
                     await self.create(obj=character)
-
-            await self.session.commit()
