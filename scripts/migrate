@@ -5,6 +5,6 @@ set -o pipefail
 set -o nounset
 
 # Run migrations
-make migrations
+make migrate
 
 exec "$@"

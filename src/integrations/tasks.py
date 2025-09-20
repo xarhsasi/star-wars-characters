@@ -1,25 +1,25 @@
 import asyncio
 import logging
 
-from celery import shared_task
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
+from src.celery_app import app
 from src.characters.service import CharacterService
 from src.films.service import FilmService
 from src.integrations.swapi.plugin import SwapiPlugin
 from src.settings import settings
 from src.starships.service import StarshipService
 
-_engine = create_async_engine(settings.DATABASE_URL, echo=False)
-_Session = async_sessionmaker(_engine, expire_on_commit=False, class_=AsyncSession)
-
-
 logger = logging.getLogger(__name__)
 
 
-@shared_task
+@app.task
 def sync_films() -> int:
     """Sync films from a plugin to the database."""
+    # Create a new async engine and session for this task
+    # otherwise sessions may be shared between tasks
+    _engine = create_async_engine(settings.DATABASE_URL, echo=False)
+    _Session = async_sessionmaker(_engine, expire_on_commit=False, class_=AsyncSession)
 
     async def run():
         plugin = SwapiPlugin()
@@ -31,9 +31,13 @@ def sync_films() -> int:
     return asyncio.run(run())
 
 
-@shared_task
+@app.task
 def sync_characters() -> int:
     """Sync films from a plugin to the database."""
+    # Create a new async engine and session for this task
+    # otherwise sessions may be shared between tasks
+    _engine = create_async_engine(settings.DATABASE_URL, echo=False)
+    _Session = async_sessionmaker(_engine, expire_on_commit=False, class_=AsyncSession)
 
     async def run():
         plugin = SwapiPlugin()
@@ -45,9 +49,13 @@ def sync_characters() -> int:
     return asyncio.run(run())
 
 
-@shared_task
+@app.task
 def sync_starships() -> int:
     """Sync films from a plugin to the database."""
+    # Create a new async engine and session for this task
+    # otherwise sessions may be shared between tasks
+    _engine = create_async_engine(settings.DATABASE_URL, echo=False)
+    _Session = async_sessionmaker(_engine, expire_on_commit=False, class_=AsyncSession)
 
     async def run():
         plugin = SwapiPlugin()
@@ -59,7 +67,7 @@ def sync_starships() -> int:
     return asyncio.run(run())
 
 
-@shared_task
+@app.task
 def sync_plugins_with_db() -> int:
     async def run():
         sync_films.delay()
